@@ -20,6 +20,7 @@ import Alert from "editorjs-alert";
 import SocialPost from "editorjs-social-post-plugin";
 import EditorJSButton from "editorjs-button";
 import Blocks from "editorjs-blocks-react-renderer";
+import Ballot from "./tools/ballot/tool";
 const DEFAULT_INITIAL_DATA = () => {
 	return {
 		time: new Date().getTime(),
@@ -89,12 +90,12 @@ const Editor = (props) => {
 						captionPlaceholder: "Quote's author",
 					},
 				},
-				linkTool: {
-					class: LinkTool,
-					config: {
-						endpoint: "http://localhost:4000/helper/fetchUrl", // Your backend endpoint for url data fetching,
-					},
-				},
+				// linkTool: {
+				// 	class: LinkTool,
+				// 	config: {
+				// 		endpoint: "http://localhost:4000/helper/fetchUrl", // Your backend endpoint for url data fetching,
+				// 	},
+				// },
 				list: {
 					class: NestedList,
 					inlineToolbar: true,
@@ -138,6 +139,7 @@ const Editor = (props) => {
 						},
 					},
 				},
+				ballot: { class: Ballot, inlineToolbar: true },
 			},
 			i18n: {
 				messages: {
@@ -153,8 +155,6 @@ const Editor = (props) => {
 			},
 		});
 	};
-
-	const [Reader, setReader] = useState(null);
 
 	const initReader = () => {
 		let reader = new EditorJS({
@@ -174,6 +174,11 @@ const Editor = (props) => {
 				embed: {
 					class: Embed,
 					inlineToolbar: true,
+					config: {
+						services: {
+							youtube: true,
+						},
+					},
 				},
 				quote: {
 					class: Quote,
@@ -254,10 +259,16 @@ const Editor = (props) => {
 			<Button
 				onClick={() => {
 					initReader();
-					console.log(editorData);
 				}}
 			>
 				Save
+			</Button>
+			<Button
+				onClick={() => {
+					console.log(editorData);
+				}}
+			>
+				Log
 			</Button>
 			<h1>Reader</h1>
 			<div id={READER_HOLDER_ID}> </div>
